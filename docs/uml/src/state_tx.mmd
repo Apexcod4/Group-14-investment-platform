@@ -1,0 +1,10 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","secondaryColor":"#FDE8C3","tertiaryColor":"#FBF9FE","fontFamily":"DejaVu Sans","fontSize":"15px"}}}%%
+stateDiagram-v2
+    direction LR
+    [*] --> PENDING: create transaction
+    PENDING --> SETTLED: payment verified /<br/>order executed
+    PENDING --> FAILED: gateway declines /<br/>insufficient funds /<br/>timeout
+    SETTLED --> REVERSED: refund or correction<br/>(admin only)
+    SETTLED --> [*]
+    FAILED --> [*]
+    REVERSED --> [*]

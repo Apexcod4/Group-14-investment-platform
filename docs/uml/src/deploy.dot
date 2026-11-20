@@ -1,0 +1,29 @@
+digraph D {
+  rankdir=LR; nodesep=0.5; ranksep=0.9; splines=true; compound=true;
+  fontname="DejaVu Sans"; labelloc=t; fontsize=20; label="Deployment and component diagram";
+  node [fontname="DejaVu Sans", fontsize=12, shape=box, style="filled", fillcolor="#EFE8F8", color="#5B2A86", fontcolor="#2A1B3D"];
+  edge [color="#5B2A86", fontname="DejaVu Sans", fontsize=11, arrowsize=0.8];
+  user [label="Investor / Admin\n(web browser)", shape=box3d, fillcolor="#FDE8C3", color="#D98A1A"];
+  subgraph cluster_fe { label="«node» Vercel"; style="rounded"; color="#5B2A86";
+    web [label="«component»\nReact / Next.js\nweb app"]; }
+  subgraph cluster_api { label="«node» Render / Railway  (Java 21, Spring Boot)"; style="rounded"; color="#5B2A86";
+    ctl [label="«component»\nREST controllers"];
+    sec [label="«component»\nSpring Security (JWT)"];
+    rec [label="«component»\nRecommendationService\n+ AllocationStrategy"];
+    auto [label="«component»\nPlanScheduler\n+ RebalanceService"];
+    alert [label="«component»\nAlertService\n+ Notifier"];
+    ctl -> sec; ctl -> rec; ctl -> auto; auto -> alert;
+  }
+  subgraph cluster_db { label="«node» Managed PostgreSQL"; style="rounded"; color="#5B2A86";
+    db [label="«database»\nkernel_db", shape=cylinder]; }
+  subgraph cluster_ext { label="«external systems»"; style="rounded,dashed"; color="#D98A1A";
+    pay [label="«interface»\nPaystack / Flutterwave\n(test mode)", fillcolor="#FDE8C3", color="#D98A1A"];
+    mkt [label="«interface»\nMarket data API\n+ sample NGX data", fillcolor="#FDE8C3", color="#D98A1A"];
+    mail [label="«interface»\nEmail / SMS provider", fillcolor="#FDE8C3", color="#D98A1A"]; }
+  user -> web [label="HTTPS"];
+  web -> ctl [label="HTTPS / JSON"];
+  rec -> db [label="JDBC"]; auto -> db [label="JDBC"]; sec -> db [label="JDBC"];
+  ctl -> pay [label="REST (wallet funding)"];
+  rec -> mkt [label="REST (prices)"];
+  alert -> mail [label="SMTP / REST"];
+}

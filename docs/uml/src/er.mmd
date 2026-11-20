@@ -1,0 +1,120 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","secondaryColor":"#FDE8C3","tertiaryColor":"#FBF9FE","fontFamily":"DejaVu Sans","fontSize":"14px"}}}%%
+erDiagram
+    USERS ||--o| WALLETS : "owns"
+    USERS ||--o{ RISK_PROFILES : "has"
+    USERS ||--o{ GOALS : "sets"
+    USERS ||--o{ PORTFOLIOS : "owns"
+    USERS ||--o{ RECOMMENDATIONS : "receives"
+    USERS ||--o{ PRICE_ALERTS : "watches"
+    WALLETS ||--o{ TRANSACTIONS : "records"
+    PORTFOLIOS ||--o{ HOLDINGS : "contains"
+    PORTFOLIOS ||--o{ INVEST_PLANS : "automated by"
+    PORTFOLIOS }o--o| GOALS : "funds"
+    RECOMMENDATIONS ||--|{ RECOMMENDED_ITEMS : "lists"
+    RECOMMENDATIONS }o--|| RISK_PROFILES : "based on"
+    ASSETS ||--o{ HOLDINGS : "held as"
+    ASSETS ||--o{ RECOMMENDED_ITEMS : "suggested in"
+    ASSETS ||--o{ PRICE_ALERTS : "tracked by"
+    ASSETS |o--o{ TRANSACTIONS : "traded in"
+    USERS {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar phone
+        varchar password_hash
+        varchar role
+        varchar kyc_status
+        timestamp created_at
+    }
+    WALLETS {
+        bigint id PK
+        bigint user_id FK
+        decimal balance
+        varchar currency
+    }
+    TRANSACTIONS {
+        bigint id PK
+        bigint wallet_id FK
+        bigint asset_id FK
+        varchar type
+        decimal amount
+        decimal units
+        varchar reference UK
+        varchar status
+        timestamp created_at
+    }
+    RISK_PROFILES {
+        bigint id PK
+        bigint user_id FK
+        int score
+        varchar category
+        int horizon_years
+        timestamp taken_at
+    }
+    GOALS {
+        bigint id PK
+        bigint user_id FK
+        varchar name
+        decimal target_amount
+        date target_date
+    }
+    PORTFOLIOS {
+        bigint id PK
+        bigint user_id FK
+        bigint goal_id FK
+        varchar name
+        json target_weights
+        decimal rebalance_threshold
+    }
+    HOLDINGS {
+        bigint id PK
+        bigint portfolio_id FK
+        bigint asset_id FK
+        decimal units
+        decimal average_cost
+    }
+    ASSETS {
+        bigint id PK
+        varchar symbol UK
+        varchar name
+        varchar asset_class
+        varchar sector
+        varchar exchange
+        decimal last_price
+        decimal dividend_yield
+        int risk_rating
+    }
+    INVEST_PLANS {
+        bigint id PK
+        bigint portfolio_id FK
+        decimal amount
+        varchar frequency
+        timestamp next_run
+        varchar status
+        int failed_runs
+    }
+    RECOMMENDATIONS {
+        bigint id PK
+        bigint user_id FK
+        bigint risk_profile_id FK
+        decimal budget
+        varchar status
+        timestamp created_at
+    }
+    RECOMMENDED_ITEMS {
+        bigint id PK
+        bigint recommendation_id FK
+        bigint asset_id FK
+        double weight
+        decimal amount
+        decimal units
+        text rationale
+    }
+    PRICE_ALERTS {
+        bigint id PK
+        bigint user_id FK
+        bigint asset_id FK
+        decimal threshold
+        varchar direction
+        varchar status
+    }

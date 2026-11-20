@@ -1,0 +1,19 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","secondaryColor":"#FDE8C3","tertiaryColor":"#FBF9FE","fontFamily":"DejaVu Sans","fontSize":"15px"}}}%%
+stateDiagram-v2
+    direction TB
+    [*] --> ACTIVE: create plan<br/>[wallet funded, amount > 0]
+    ACTIVE --> PAUSED: investor pauses
+    PAUSED --> ACTIVE: investor resumes
+    ACTIVE --> SUSPENDED: run fails 3 times<br/>(insufficient funds)
+    SUSPENDED --> ACTIVE: investor funds wallet<br/>and resumes
+    ACTIVE --> COMPLETED: end date reached
+    ACTIVE --> CANCELLED: investor cancels
+    PAUSED --> CANCELLED: investor cancels
+    SUSPENDED --> CANCELLED: investor cancels
+    COMPLETED --> [*]
+    CANCELLED --> [*]
+
+    note right of ACTIVE
+        each successful run calls
+        advanceNextRun() and stays ACTIVE
+    end note

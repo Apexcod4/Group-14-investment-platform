@@ -1,0 +1,57 @@
+# ---- Java / Maven / Gradle ----
+target/
+build/
+.gradle/
+*.class
+*.jar
+*.war
+!gradle/wrapper/gradle-wrapper.jar
+hs_err_pid*
+
+# ---- Node / React / Next.js ----
+node_modules/
+.next/
+out/
+dist/
+.vercel/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+coverage/
+
+# ---- Secrets and environment ----
+.env
+.env.*
+!.env.example
+application-local.properties
+application-local.yml
+*.pem
+*.key
+
+# ---- Databases and local data ----
+*.sqlite
+*.sqlite3
+*.db
+pgdata/
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- IDEs and editors ----
+.idea/
+*.iml
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+.apt_generated/
+.factorypath
+nbproject/
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+desktop.ini

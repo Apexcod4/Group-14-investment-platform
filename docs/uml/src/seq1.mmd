@@ -1,0 +1,45 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","actorBkg":"#5B2A86","actorTextColor":"#FFFFFF","actorBorder":"#3B1A63","signalColor":"#3B1A63","signalTextColor":"#2A1B3D","noteBkgColor":"#FDE8C3","noteBorderColor":"#D98A1A","noteTextColor":"#2A1B3D","activationBkgColor":"#EFE8F8","activationBorderColor":"#5B2A86","labelBoxBkgColor":"#EFE8F8","labelBoxBorderColor":"#5B2A86","labelTextColor":"#2A1B3D","loopTextColor":"#3B1A63","sequenceNumberColor":"#FFFFFF","fontFamily":"DejaVu Sans"},"sequence":{"mirrorActors":false,"messageMargin":38,"actorMargin":24,"width":215,"height":46,"boxMargin":8,"useMaxWidth":false}}}%%
+sequenceDiagram
+    autonumber
+    participant I as Investor
+    participant UI as Web App
+    participant RC as RecommendationController
+    participant RS as RiskScorer
+    participant RE as RecommendationEngine
+    participant AS as AllocationStrategy
+    participant SEL as AssetSelector
+    participant MD as MarketDataProvider
+    participant DB as Database
+    I->>UI: Enter budget, goal, horizon
+    UI->>RC: POST /recommendations
+    RC->>DB: Load latest RiskProfile
+    alt No risk profile or profile is stale
+        RC-->>UI: 409 Take the risk quiz
+        UI->>I: Show risk quiz
+        I->>UI: Submit answers
+        UI->>RC: POST /risk-profile
+        RC->>RS: score(answers, horizonYears)
+        RS-->>RC: RiskProfile
+        RC->>DB: Save RiskProfile
+    end
+    RC->>RE: recommend(budget, goal, profile)
+    RE->>AS: targetWeights(profile)
+    AS-->>RE: weights per asset class
+    loop For each asset class
+        RE->>SEL: select(assetClass, n, rules)
+        SEL->>MD: getPrice(symbol)
+        MD-->>SEL: latest price
+        SEL-->>RE: ranked assets within caps
+    end
+    RE->>RE: sizePositions(), explain()
+    RE-->>RC: Recommendation (PROPOSED)
+    RC->>DB: Save Recommendation
+    RC-->>UI: 200 plan with reasons
+    UI-->>I: Show allocation and "Why this?"
+    opt Investor edits the plan
+        I->>UI: Change amount or remove an asset
+        UI->>RC: PUT /recommendations/{id}
+        RC->>RE: recalculate(recommendation)
+        RE-->>RC: Updated Recommendation
+        RC-->>UI: Updated plan
+    end

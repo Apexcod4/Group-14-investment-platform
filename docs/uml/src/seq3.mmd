@@ -1,0 +1,39 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","actorBkg":"#5B2A86","actorTextColor":"#FFFFFF","actorBorder":"#3B1A63","signalColor":"#3B1A63","signalTextColor":"#2A1B3D","noteBkgColor":"#FDE8C3","noteBorderColor":"#D98A1A","noteTextColor":"#2A1B3D","labelBoxBkgColor":"#EFE8F8","labelBoxBorderColor":"#5B2A86","labelTextColor":"#2A1B3D","loopTextColor":"#3B1A63","fontFamily":"DejaVu Sans"},"sequence":{"mirrorActors":false,"messageMargin":38,"actorMargin":24,"width":215,"height":46,"useMaxWidth":false}}}%%
+sequenceDiagram
+    autonumber
+    participant T as Scheduler (daily timer)
+    participant PS as InvestPlanScheduler
+    participant DB as Database
+    participant IS as InvestmentService
+    participant RB as RebalanceService
+    participant N as Notifier
+    participant I as Investor
+    T->>PS: runDuePlans()
+    PS->>DB: Find InvestPlans where status = ACTIVE and nextRun <= now
+    DB-->>PS: due plans
+    loop For each due plan
+        PS->>IS: buy per target weights (plan.amount)
+        alt Wallet has enough balance
+            IS->>DB: Save Holdings and Transactions (SETTLED)
+            PS->>DB: advanceNextRun(), failedRuns = 0
+            PS->>RB: needsRebalance(portfolio)
+            RB-->>PS: drift value
+            opt Drift greater than threshold (5 points)
+                PS->>RB: rebalance(portfolio)
+                RB->>IS: sell overweight, buy underweight
+                IS->>DB: Save Transactions
+            end
+            PS->>N: send(investor, "Your plan ran: details")
+            N-->>I: Email / in-app message
+        else Insufficient balance
+            IS-->>PS: InsufficientFundsException
+            PS->>DB: failedRuns = failedRuns + 1
+            alt failedRuns reaches 3
+                PS->>DB: status = SUSPENDED
+                PS->>N: send(investor, "Plan suspended: fund wallet")
+            else failedRuns below 3
+                PS->>N: send(investor, "Top up your wallet")
+            end
+            N-->>I: Email / in-app message
+        end
+    end

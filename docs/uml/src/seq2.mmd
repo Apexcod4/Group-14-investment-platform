@@ -1,0 +1,43 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#EFE8F8","primaryBorderColor":"#5B2A86","primaryTextColor":"#2A1B3D","lineColor":"#5B2A86","actorBkg":"#5B2A86","actorTextColor":"#FFFFFF","actorBorder":"#3B1A63","signalColor":"#3B1A63","signalTextColor":"#2A1B3D","noteBkgColor":"#FDE8C3","noteBorderColor":"#D98A1A","noteTextColor":"#2A1B3D","labelBoxBkgColor":"#EFE8F8","labelBoxBorderColor":"#5B2A86","labelTextColor":"#2A1B3D","loopTextColor":"#3B1A63","fontFamily":"DejaVu Sans"},"sequence":{"mirrorActors":false,"messageMargin":38,"actorMargin":24,"width":215,"height":46,"useMaxWidth":false}}}%%
+sequenceDiagram
+    autonumber
+    participant I as Investor
+    participant UI as Web App
+    participant PC as PortfolioController
+    participant WS as WalletService
+    participant PG as PaymentGateway
+    participant IS as InvestmentService
+    participant MD as MarketDataProvider
+    participant DB as Database
+    I->>UI: Accept plan (choose auto-invest: monthly)
+    UI->>PC: POST /recommendations/{id}/accept
+    PC->>DB: Load Recommendation and Wallet
+    alt Wallet balance is lower than the plan total
+        PC-->>UI: 402 Fund wallet first
+        UI->>I: Show funding screen
+        I->>UI: Enter amount
+        UI->>WS: startFunding(wallet, amount)
+        WS->>PG: initialize(amount, email)
+        PG-->>WS: PaymentSession (checkout link)
+        WS-->>UI: Checkout link
+        I->>PG: Pay on gateway page
+        PG-->>WS: Webhook: charge.success(reference)
+        WS->>PG: verify(reference)
+        PG-->>WS: PaymentResult (success)
+        WS->>DB: Credit wallet, save Transaction (SETTLED)
+        UI->>PC: Retry accept
+    end
+    PC->>DB: Create Portfolio with target weights
+    loop For each RecommendedItem
+        PC->>IS: buy(portfolio, asset, amount)
+        IS->>MD: getPrice(symbol)
+        MD-->>IS: price
+        IS->>WS: debit(wallet, amount)
+        IS->>DB: Save Holding and Transaction (BUY, SETTLED)
+    end
+    opt Investor chose auto-invest
+        PC->>DB: Create InvestPlan (ACTIVE, nextRun)
+    end
+    PC->>DB: Mark Recommendation ACCEPTED
+    PC-->>UI: 201 Portfolio created
+    UI-->>I: Show portfolio dashboard

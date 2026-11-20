@@ -1,0 +1,44 @@
+digraph A {
+  rankdir=TB; nodesep=0.35; ranksep=0.45; splines=polyline; compound=true;
+  fontname="DejaVu Sans"; labelloc=t; fontsize=20; label="Activity diagram: from budget to automated investing";
+  node [fontname="DejaVu Sans", fontsize=12, shape=box, style="rounded,filled", fillcolor="#EFE8F8", color="#5B2A86", fontcolor="#2A1B3D"];
+  edge [color="#5B2A86", fontname="DejaVu Sans", fontsize=11, arrowsize=0.8];
+
+  start [shape=circle, label="", width=0.25, style=filled, fillcolor="#3B1A63"];
+  stop  [shape=doublecircle, label="", width=0.22, style=filled, fillcolor="#3B1A63"];
+
+  subgraph cluster_inv { label="Investor"; style="rounded"; color="#5B2A86"; fontsize=14; fontname="DejaVu Sans Bold";
+    a1 [label="Enter budget,\ngoal and horizon"];
+    a2 [label="Take risk quiz"];
+    a3 [label="Review portfolio\nand 'Why this?' reasons"];
+    d1 [shape=diamond, style=filled, fillcolor="#FDE8C3", color="#D98A1A", label="Accept?"];
+    a4 [label="Adjust amount\nor ethical filter"];
+    a5 [label="Choose frequency\nand start auto-invest plan"];
+  }
+  subgraph cluster_sys { label="Kernel system"; style="rounded"; color="#D98A1A"; fontsize=14; fontname="DejaVu Sans Bold";
+    s1 [label="Score risk profile"];
+    s2 [label="Fetch market prices"];
+    s3 [label="Select assets and\ncompute allocation"];
+    s4 [label="Save recommendation\nand explanations"];
+    s5 [label="Create InvestPlan\n(status ACTIVE)"];
+    s6 [label="Scheduler runs plan\non due date"];
+    d2 [shape=diamond, style=filled, fillcolor="#FDE8C3", color="#D98A1A", label="Wallet has\nenough funds?"];
+    s7 [label="Execute simulated\nbuy orders"];
+    s8 [label="Record SETTLED\ntransaction,\nupdate holdings"];
+    s9 [label="Increment failedRuns,\nsend top-up notice"];
+    d3 [shape=diamond, style=filled, fillcolor="#FDE8C3", color="#D98A1A", label="failedRuns\n>= 3?"];
+    s10 [label="Suspend plan"];
+    d4 [shape=diamond, style=filled, fillcolor="#FDE8C3", color="#D98A1A", label="Drift above\n5 points?"];
+    s11 [label="Rebalance\nportfolio"];
+    s12 [label="Advance next run date"];
+  }
+  start -> a1 -> a2 -> s1 -> s2 -> s3 -> s4 -> a3 -> d1;
+  d1 -> a4 [label=" no"]; a4 -> s3;
+  d1 -> a5 [label=" yes"]; a5 -> s5 -> s6 -> d2;
+  d2 -> s7 [label=" yes"]; s7 -> s8 -> d4;
+  d4 -> s11 [label=" yes"]; s11 -> s12; d4 -> s12 [label=" no"];
+  d2 -> s9 [label=" no"]; s9 -> d3;
+  d3 -> s10 [label=" yes"]; s10 -> stop;
+  d3 -> s12 [label=" no"];
+  s12 -> s6 [label=" wait for next\n due date", constraint=false];
+}
