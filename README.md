@@ -76,7 +76,7 @@ Preview:
 
 ## Project process
 
-We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md) for roles, events, the product backlog, the sprint plan and the Definition of Done.
+We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md) for roles, events, the product backlog, the sprint plan and the Definition of Done, and [kanban.md](kanban.md) for the live task board.
 
 ---
 
@@ -86,6 +86,7 @@ We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md
 .
 ├── README.md
 ├── scrum.md              Scrum plan and backlog
+├── kanban.md             Kanban task board
 ├── .gitignore
 ├── docs/
 │   └── uml/              UML diagrams (PNG) and sources
