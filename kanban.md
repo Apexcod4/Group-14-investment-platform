@@ -43,9 +43,67 @@ _Empty_
 
 ## To Do – Sprint 1 (sign up, log in, fund wallet)
 
-- [ ] [US-01] Register and log in securely · _TBD_ · 5
-- [ ] [US-02] Fund wallet with test-mode payment · _TBD_ · 5
-- [ ] [US-03] Risk quiz and scoring · _TBD_ · 3
+Each card is one feature. It has 3 user stories, and each story has 3 acceptance criteria.
+
+### Card 1 · [US-01] Accounts and security · _TBD_ · 5 pts
+
+**1.1 Register**
+As a new user, I want to create an account so that I can start investing.
+- [ ] Registration needs a name, a valid email and a password of at least 8 characters with a letter and a number.
+- [ ] An email that is already registered is rejected with a clear message.
+- [ ] A successful registration creates the investor account and an empty wallet with a ₦0.00 balance.
+
+**1.2 Log in**
+As a registered user, I want to log in so that I can reach my account.
+- [ ] Correct email and password return a signed token and open the dashboard.
+- [ ] Wrong credentials show one generic error that does not say which field was wrong.
+- [ ] After 5 failed attempts the account is locked for 15 minutes.
+
+**1.3 Session and logout**
+As a logged-in user, I want my session protected so that nobody else can use my account.
+- [ ] Protected pages and API routes redirect or return 401 when there is no valid token.
+- [ ] A token expires after 30 minutes of inactivity and the user is asked to log in again.
+- [ ] Logging out ends the session and the old token can no longer be used.
+
+### Card 2 · [US-02] Wallet funding · _TBD_ · 5 pts
+
+**2.1 Fund wallet**
+As an investor, I want to add money to my wallet so that I have funds to invest.
+- [ ] I can enter an amount (minimum ₦100) and pay through the payment gateway in test mode.
+- [ ] After a successful payment the wallet balance increases by exactly the amount paid.
+- [ ] Every funding attempt creates a transaction record with a unique reference.
+
+**2.2 Balance and history**
+As an investor, I want to see my balance and past transactions so that I know where my money is.
+- [ ] The balance is shown in naira with 2 decimal places and updates right after a payment.
+- [ ] The transaction list shows date, type, amount and status (PENDING, SETTLED, FAILED), newest first.
+- [ ] I can only see my own wallet and transactions.
+
+**2.3 Failed and duplicate payments**
+As an investor, I want failed or repeated payments handled safely so that I never lose or gain money by mistake.
+- [ ] A declined or cancelled payment is marked FAILED and the balance does not change.
+- [ ] If the gateway sends the same payment confirmation twice, the wallet is credited only once.
+- [ ] I see a clear message explaining what happened and what to do next.
+
+### Card 3 · [US-03] Risk profile quiz · _TBD_ · 3 pts
+
+**3.1 Take the quiz**
+As an investor, I want to answer a short quiz so that Kernel understands how much risk I can handle.
+- [ ] The quiz has 5 to 7 multiple-choice questions, shown one at a time or on one page.
+- [ ] I cannot submit until every question has an answer.
+- [ ] I can go back and change an answer before I submit.
+
+**3.2 Score and category**
+As an investor, I want to get a risk category so that my recommendations match my comfort level.
+- [ ] Each answer carries a fixed number of points and the total score is calculated by the system.
+- [ ] The score maps to CONSERVATIVE, BALANCED or GROWTH using fixed ranges, and the same answers always give the same result.
+- [ ] The result is saved to my profile with the date it was taken.
+
+**3.3 View and retake**
+As an investor, I want to see and update my result so that it stays accurate as my situation changes.
+- [ ] My category and a plain-language explanation are shown on my profile.
+- [ ] Retaking the quiz creates a new result, the newest one is used for recommendations, and old results are kept.
+- [ ] A user who has not taken the quiz is prompted to take it before requesting a recommendation.
 
 ## Backlog – Must
 
