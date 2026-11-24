@@ -87,6 +87,7 @@ We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md
 ├── README.md
 ├── scrum.md              Scrum plan and backlog
 ├── kanban.md             Kanban task board
+├── work-breakdown.md     5 parts, owners and Sprint 1 plan
 ├── .gitignore
 ├── docs/
 │   └── uml/              UML diagrams (PNG) and sources
