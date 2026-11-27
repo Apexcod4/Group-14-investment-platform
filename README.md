@@ -94,7 +94,7 @@ We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md
 ├── backend/              Spring Boot API (Java 21, Maven)
 ├── docker-compose.yml    Local PostgreSQL
 ├── .github/workflows/    CI (mvn verify on every push and pull request)
-└── frontend/             React / Next.js app (to be added)
+└── frontend/             React / Next.js app (assets list, auto-invest plans)
 ```
 
 ---
@@ -115,10 +115,11 @@ docker compose up -d
 cd backend
 mvn spring-boot:run
 
-# front end (added in a later sprint)
+# front end (http://localhost:3000), in a second terminal from the repo root
 cd frontend
 npm install
 npm run dev
+# set BACKEND_URL before `npm run build` if the back end is not on localhost:8080
 ```
 
 Never commit `.env` files or real keys. They are ignored by `.gitignore`.
