@@ -91,7 +91,9 @@ We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md
 ├── .gitignore
 ├── docs/
 │   └── uml/              UML diagrams (PNG) and sources
-├── backend/              Spring Boot API (to be added)
+├── backend/              Spring Boot API (Java 21, Maven)
+├── docker-compose.yml    Local PostgreSQL
+├── .github/workflows/    CI (mvn verify on every push and pull request)
 └── frontend/             React / Next.js app (to be added)
 ```
 
@@ -99,21 +101,21 @@ We follow **Scrum** with two-week sprints over 12 weeks. See [scrum.md](scrum.md
 
 ## Getting started
 
-> The code folders are added as sprints deliver them. These steps will apply once they exist.
-
-**Prerequisites:** Java 21, Node 20+, PostgreSQL 15+, Git.
+**Prerequisites:** Java 21, Maven 3.9+, Docker (for PostgreSQL), Node 20+ (front end, added later), Git.
 
 ```bash
 # clone
 git clone https://github.com/Apexcod4/Group-14-investment-platform.git
 cd Group-14-investment-platform
 
-# back end
-cd backend
-cp .env.example .env        # set database and gateway test keys
-./mvnw spring-boot:run
+# database
+docker compose up -d
 
-# front end (new terminal)
+# back end (http://localhost:8080/api/health)
+cd backend
+mvn spring-boot:run
+
+# front end (added in a later sprint)
 cd frontend
 npm install
 npm run dev

@@ -1,0 +1,31 @@
+# ILLUSTRATIVE SAMPLE DATA for development and demos. NOT real market prices.
+# Replace with a real provider (see MarketDataProvider) or refresh from the NGX website.
+# asset_class: NG_STOCK | US_STOCK | ETF | FIXED_INCOME   risk_rating: 1 (low) to 5 (high)
+symbol,name,asset_class,sector,exchange,currency,price,dividend_yield,risk_rating
+DANGCEM,Dangote Cement,NG_STOCK,Industrials,NGX,NGN,450.00,0.0600,3
+MTNN,MTN Nigeria,NG_STOCK,Telecoms,NGX,NGN,250.00,0.0500,3
+AIRTELAFRI,Airtel Africa,NG_STOCK,Telecoms,NGX,NGN,2100.00,0.0300,3
+BUACEMENT,BUA Cement,NG_STOCK,Industrials,NGX,NGN,120.00,0.0450,3
+GTCO,Guaranty Trust Holding,NG_STOCK,Financials,NGX,NGN,60.00,0.0900,3
+ZENITHBANK,Zenith Bank,NG_STOCK,Financials,NGX,NGN,55.00,0.1000,3
+UBA,United Bank for Africa,NG_STOCK,Financials,NGX,NGN,40.00,0.0800,3
+ACCESSCORP,Access Holdings,NG_STOCK,Financials,NGX,NGN,22.00,0.0700,4
+FBNH,FBN Holdings,NG_STOCK,Financials,NGX,NGN,35.00,0.0500,4
+STANBIC,Stanbic IBTC Holdings,NG_STOCK,Financials,NGX,NGN,80.00,0.0600,3
+SEPLAT,Seplat Energy,NG_STOCK,Energy,NGX,NGN,5500.00,0.0400,4
+NESTLE,Nestle Nigeria,NG_STOCK,Consumer Goods,NGX,NGN,900.00,0.0200,4
+NB,Nigerian Breweries,NG_STOCK,Consumer Goods,NGX,NGN,45.00,0.0300,4
+GUINNESS,Guinness Nigeria,NG_STOCK,Consumer Goods,NGX,NGN,110.00,0.0200,4
+WAPCO,Lafarge Africa,NG_STOCK,Industrials,NGX,NGN,90.00,0.0500,3
+PRESCO,Presco,NG_STOCK,Agriculture,NGX,NGN,1500.00,0.0300,4
+AAPL,Apple Inc,US_STOCK,Technology,NASDAQ,USD,230.00,0.0050,3
+MSFT,Microsoft,US_STOCK,Technology,NASDAQ,USD,430.00,0.0070,3
+AMZN,Amazon,US_STOCK,Consumer Discretionary,NASDAQ,USD,200.00,0.0000,4
+NVDA,NVIDIA,US_STOCK,Technology,NASDAQ,USD,140.00,0.0003,5
+VOO,Vanguard S&P 500 ETF,ETF,Diversified,NYSE Arca,USD,520.00,0.0130,3
+VTI,Vanguard Total Stock Market ETF,ETF,Diversified,NYSE Arca,USD,280.00,0.0130,3
+QQQ,Invesco QQQ Trust,ETF,Technology,NASDAQ,USD,500.00,0.0060,4
+BND,Vanguard Total Bond Market ETF,ETF,Bonds,NASDAQ,USD,73.00,0.0350,2
+NGTBILL,Nigerian Treasury Bills (sample),FIXED_INCOME,Government,FMDQ,NGN,100.00,0.1800,1
+FGNBOND,FGN Savings Bond (sample),FIXED_INCOME,Government,FMDQ,NGN,100.00,0.1500,1
+MMFUND,Money Market Fund (sample),FIXED_INCOME,Money Market,FMDQ,NGN,100.00,0.1600,1
